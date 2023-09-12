@@ -50,50 +50,67 @@ class BottomColumn extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return const Column(
+    
+    String myText = 'Personal Text';
+
+    return Column(
       children: [
-        CalculatorNumbers('1', '2', '3'),
-        SizedBox(
+        Text(myText),
+        CalculatorNumbers('1', '2', '3', myText),
+        const SizedBox(
           height: 20,
         ),
-        CalculatorNumbers('4', '5', '6'),
-        SizedBox(
+        CalculatorNumbers('4', '5', '6', myText),
+        const SizedBox(
           height: 20,
         ),
-        CalculatorNumbers('7', '8', '9'),
+        CalculatorNumbers('7', '8', '9', myText),
       ],
     );
   }
 }
 
 class CalculatorNumbers extends StatelessWidget {
-  const CalculatorNumbers(this.firstNum, this.secondNum, this.thirdNum,
-      {super.key});
+  const CalculatorNumbers(this.firstNum, this.secondNum, this.thirdNum, this.displayText, {super.key});
 
   final String firstNum;
   final String secondNum;
   final String thirdNum;
+  final String displayText;
 
   @override
   Widget build(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        NumberStyledButton(firstNum),
-        NumberStyledButton(secondNum),
-        NumberStyledButton(thirdNum),
+        NumberStyledButton(displayText, firstNum),
+        NumberStyledButton(displayText, secondNum),
+        NumberStyledButton(displayText, thirdNum),
       ],
     );
   }
 }
 
-class NumberStyledButton extends StatelessWidget {
-  const NumberStyledButton(this.text, {super.key});
+class NumberStyledButton extends StatefulWidget {
+  NumberStyledButton(this.middleColumnText, this.text, {super.key});
 
   final String text;
+  String middleColumnText;
 
   @override
+  State<NumberStyledButton> createState() => _NumberStyledButtonState();
+}
+
+class _NumberStyledButtonState extends State<NumberStyledButton> {
+  @override
   Widget build(context) {
+
+    void setText(){
+      setState(() {
+        widget.middleColumnText += widget.text;
+      });
+    }
+
     return ElevatedButton(
       style: const ButtonStyle(
         fixedSize: MaterialStatePropertyAll(Size.fromWidth(40)),
@@ -101,8 +118,9 @@ class NumberStyledButton extends StatelessWidget {
           CircleBorder(),
         ),
       ),
-      onPressed: () {},
-      child: Text(text),
+      onPressed: setText,
+      child: Text(widget.text),
     );
   }
 }
+
